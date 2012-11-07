@@ -1,10 +1,8 @@
-yii-enumattributes
-==================
+# Yii Enumattributes
 
 Yii ActiveRecord behavior used to work with ENUM attributes
 
-Attaching example
-==================
+## Attaching example
 
 You need to add this behavior to behaviors:
 
@@ -13,13 +11,13 @@ public function behaviors()
 {
     return array(
         ...
-        array(
+        'statusEnum' => array(
             'class' => 'ext.behaviors.enumattributes.EnumAttributesBehavior',
             'attribute' => 'status',
         ),
     );
 }
-```
+`
 
 And also you should add behavior property to phpDoc comments:
 
@@ -32,8 +30,7 @@ And also you should add behavior property to phpDoc comments:
 class ...
 ```
 
-Using
-==================
+## Using
 
 Now you can retrieve list of possible values by calling behavior like that:
 
