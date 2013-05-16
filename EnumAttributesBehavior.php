@@ -3,8 +3,9 @@
 /**
  * @property-read CActiveRecord $owner
  * 
- * @property-read array $values 
- * @property-read array $valueLabels 
+ * @property-read array $values
+ * @property-read array $valueLabels
+ * @property-read array $rule enum "in" validation rule.
  */
 class EnumAttributesBehavior extends CActiveRecordBehavior
 {
@@ -63,6 +64,15 @@ class EnumAttributesBehavior extends CActiveRecordBehavior
         return $labels;
     }
 
+    /**
+     * Returns enum "in" validation rule.
+     * @return array
+     */
+    public function getRule()
+    {
+        return array($this->attribute, 'in', 'range' => $this->values);
+    }
+    
     
     /* Cache functions */
     
