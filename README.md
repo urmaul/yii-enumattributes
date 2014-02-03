@@ -60,3 +60,20 @@ $model->statusEnum->valueLabels
 Values order is equal to values order in DB structure.
 
 Labels are generated from values using [CModel::generateAttributeLabel](http://www.yiiframework.com/doc/api/1.1/CModel#generateAttributeLabel-detail) function. You can set custom labels using the **labels**  behavior option.
+
+### Validation rule
+
+This behavior can generate validation rule for you.
+
+```php
+public function rules()
+{
+    return array(
+        ...
+        $this->statusEnum->rule,
+        // or
+        $this->statusEnum->rule + array('on' => 'create'),
+        ...
+    );
+}
+```
