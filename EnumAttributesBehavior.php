@@ -42,17 +42,7 @@ class EnumAttributesBehavior extends CActiveRecordBehavior
     
     public function getValueLabels()
     {
-        $values = $this->values;
-        $labels = array();
-        
-        foreach ($values as $value) {
-            if ( isset($this->labels[$value]) )
-                $labels[$value] = $this->labels[$value];
-            else
-                $labels[$value] = $this->owner->generateAttributeLabel($value);
-        }
-        
-        return $labels;
+        return $this->getLabelsFor($this->values);
     }
     
     public function getVisibleLabels()
