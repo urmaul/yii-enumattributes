@@ -5,7 +5,6 @@
  * 
  * @property-read array $values
  * @property-read array $valueLabels
- * @property-read array $visibleLabels
  * @property-read array $rule enum "in" validation rule.
  */
 class EnumAttributesBehavior extends CActiveRecordBehavior
@@ -23,11 +22,26 @@ class EnumAttributesBehavior extends CActiveRecordBehavior
     public $labels;
     
     /**
-     * Visible values array.
+     * Values groups.
      * @var string[]
      */
-    public $visible;
+    public $groups;
     
+    
+    public function canGetProperty($name)
+    {
+        return
+            $this->groupName($name) ||
+            parent::canGetProperty($name);
+    }
+    
+    public function __get($name)
+    {
+        if ($groupName = $this->groupName($name))
+            return $this->getGroupLabels($groupName);
+        else
+            parent::__get($name);
+    }
     
     public function getValues()
     {
@@ -40,14 +54,18 @@ class EnumAttributesBehavior extends CActiveRecordBehavior
         return $values;
     }
     
-    public function getValueLabels()
+    public function getValueLabels($values = null)
     {
-        return $this->getLabelsFor($this->values);
+        if ($values === null)
+            $values = $this->values;
+        
+        return $this->getLabelsFor($values);
     }
     
-    public function getVisibleLabels()
+    public function getGroupLabels($group)
     {
-        return $this->getLabelsFor($this->visible);
+        $values = $this->groups[$group];
+        return $this->getValueLabels($values);
     }
 
     /**
@@ -61,14 +79,23 @@ class EnumAttributesBehavior extends CActiveRecordBehavior
     
     protected function getLabelsFor($values)
     {
+        $owner = $this->getOwner();
         $labels = array();
         foreach ($values as $value) {
             if (isset($this->labels[$value]))
                 $labels[$value] = $this->labels[$value];
             else
-                $labels[$value] = $this->owner->generateAttributeLabel($value);
+                $labels[$value] = $owner->generateAttributeLabel($value);
         }
         
         return $labels;
+    }
+
+    private function groupName($property)
+    {
+        if (preg_match('~^(.*)Labels$~', $property, $match) && isset($this->groups[$match[1]]))
+            return $match[1];
+        else
+            return false;
     }
 }
