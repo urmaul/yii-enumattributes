@@ -40,17 +40,17 @@ class EnumAttributesBehavior extends CActiveRecordBehavior
         if ($groupName = $this->groupName($name))
             return $this->getGroupLabels($groupName);
         else
-            parent::__get($name);
+            return parent::__get($name);
     }
     
     public function getValues()
     {
-        $dbType = $this->owner->tableSchema->columns[$this->attribute]->dbType;
+        $dbType = $this->getOwner()->tableSchema->columns[$this->attribute]->dbType;
         $off = strpos($dbType, '(');
         $enum = substr($dbType, $off+1, -1);
-        
+
         $values = str_replace("'", null, explode(',', $enum));
-        
+
         return $values;
     }
     
@@ -72,9 +72,14 @@ class EnumAttributesBehavior extends CActiveRecordBehavior
      * Returns enum "in" validation rule.
      * @return array
      */
-    public function getRule()
+    public function getRule($group = null)
     {
-        return array($this->attribute, 'in', 'range' => $this->values);
+        if ($group === null)
+            $values = $this->getValues();
+        else
+            $values = $this->groups[$group];
+
+        return array($this->attribute, 'in', 'range' => $values);
     }
     
     protected function getLabelsFor($values)
