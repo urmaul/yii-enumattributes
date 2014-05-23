@@ -6,6 +6,7 @@
  * @property-read array $values
  * @property-read array $valueLabels
  * @property-read array $rule enum "in" validation rule.
+ * @property-read array $label
  */
 class EnumAttributesBehavior extends CActiveRecordBehavior
 {
@@ -87,13 +88,21 @@ class EnumAttributesBehavior extends CActiveRecordBehavior
         $owner = $this->getOwner();
         $labels = array();
         foreach ($values as $value) {
-            if (isset($this->labels[$value]))
-                $labels[$value] = $this->labels[$value];
-            else
-                $labels[$value] = $owner->generateAttributeLabel($value);
+            $labels[$value] = $this->getLabel($value);
         }
         
         return $labels;
+    }
+    
+    public function getLabel($value = null)
+    {
+        if ($value === null)
+            $value = $this->getOwner()->getAttribute($this->attribute);
+        
+        if (isset($this->labels[$value]))
+            return $this->labels[$value];
+        else
+            return $owner->generateAttributeLabel($value);
     }
 
     private function groupName($property)
