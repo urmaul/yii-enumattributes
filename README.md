@@ -2,6 +2,12 @@
 
 Yii ActiveRecord behavior used to work with ENUM attributes
 
+## Installing
+
+```
+composer require urmaul/yii-enumattributes dev-master
+```
+
 ## Attaching example
 
 You need to add this behavior to behaviors:
@@ -12,7 +18,7 @@ public function behaviors()
     return array(
         ...
         'statusEnum' => array(
-            'class' => 'ext.behaviors.enumattributes.EnumAttributesBehavior',
+            'class' => 'EnumAttributesBehavior',
             'attribute' => 'status',
         ),
     );
