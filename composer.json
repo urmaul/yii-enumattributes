@@ -1,0 +1,21 @@
+{
+    "name": "urmaul/yii-enumattributes",
+    "type": "library",
+    "description": "Yii ActiveRecord behavior used to work with ENUM attributes.",
+    "keywords": ["yii", "enum", "behavior"],
+    "homepage": "https://github.com/urmaul/enumattributes",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Bogdan Kolbik"
+        }
+    ],
+    "require": {
+        "yiisoft/yii": "1.*"
+    },
+    "autoload": {
+        "classmap": [
+            "EnumAttributesBehavior.php"
+        ]
+    }
+}
