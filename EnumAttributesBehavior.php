@@ -96,8 +96,9 @@ class EnumAttributesBehavior extends CActiveRecordBehavior
     
     public function getLabel($value = null)
     {
+        $owner = $this->getOwner();
         if ($value === null)
-            $value = $this->getOwner()->getAttribute($this->attribute);
+            $value = $owner->getAttribute($this->attribute);
         
         if (isset($this->labels[$value]))
             return $this->labels[$value];
