@@ -6,6 +6,7 @@
  * @property-read array $values
  * @property-read array $valueLabels
  * @property-read array $rule enum "in" validation rule.
+ * @property-read array $labelToValueRule filter rule that converts labels to values.
  * @property-read array $label
  */
 class EnumAttributesBehavior extends CActiveRecordBehavior
@@ -63,9 +64,9 @@ class EnumAttributesBehavior extends CActiveRecordBehavior
         return $this->getLabelsFor($values);
     }
     
-    public function getGroupLabels($group)
+    public function getGroupLabels($group = null)
     {
-        $values = $this->groups[$group];
+		$values = $group !== null ? $this->groups[$group] : $this->values;
         return $this->getValueLabels($values);
     }
 
@@ -81,6 +82,24 @@ class EnumAttributesBehavior extends CActiveRecordBehavior
             $values = $this->groups[$group];
 
         return array($this->attribute, 'in', 'range' => $values);
+    }
+
+    /**
+     * Returns filter rule that converts labels to values.
+     * @return array
+     */
+    public function getLabelToValueRule()
+    {
+        return array($this->attribute, 'filter', 'filter' => array($this, 'labelToValue'));
+    }
+
+	/**
+	 * Converts label to value if possible.
+	 */
+    public function labelToValue($label)
+    {
+		$map = array_flip($this->getValueLabels());
+        return isset($map[$label]) ? $map[$label] : $label;
     }
     
     protected function getLabelsFor($values)
